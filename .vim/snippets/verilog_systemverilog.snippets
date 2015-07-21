@@ -1,0 +1,1446 @@
+snippet always  always @ ..
+	always @(${1:posedge clk})
+	begin
+		${2}
+	end
+snippet always_comb  always_comb ..
+	always_comb
+	begin
+		${1}
+	end
+snippet always_ff  always_ff ..
+	always_ff @(${1:posedge clk or negedge reset_n})
+		${2}
+	end
+snippet always_ff  always_ff ..
+	always_ff @(${1:posedge clk or negedge reset_n})
+		${2}
+	end
+snippet always_latch  always_latch ..
+	always_latch
+		${1}
+	end
+snippet case  case() .. 
+	case(${1:expression})
+		${2:value1}: ${3}
+	
+		// other case branches
+	
+		default: 
+	endcase
+snippet casex  casex() .. 
+	casex(${1:expression})
+		${2:value1}: ${3}
+	
+		// other case branches
+	
+		default: 
+	endcase
+snippet casez  casez() .. 
+	casez(${1:expression})
+		${2:value1}: ${3}
+	
+		// other case branches
+	
+		default: 
+	endcase
+snippet class  class .. endclass
+	class ${1:class_name} ${2:extends ${3:base_class}};
+		${5}
+		function new(${4:args});
+			super.new($4);
+	
+		endfunction: new
+	
+	endclass: $1
+snippet clocking  clocking .. { .. }
+	clocking ${1:name_cb} @(posedge ${2:clock});
+		default input #${3:setup_time} output #${4:hold_time};
+		${5}
+		// output declarations
+		// input declarations
+	endclocking: $1
+snippet do  do .. while()
+	do
+	begin
+		${2}
+	end
+	while(${1});
+snippet enum  enum .. { .. }
+	typedef enum {
+		${2}
+	} ${1:name_e};
+snippet final  final ..
+	final
+	begin
+		${1}
+	end
+snippet for  for() .. 
+	for(${1:int i = 0}; ${2:i <= n}; ${3:i++})
+	begin
+		${4}
+	end
+snippet foreach  foreach(x[i]) ..
+	foreach(${1:x}[i])
+	begin
+		${2}
+	end
+snippet forever  forever .. 
+	forever
+	begin
+		${1}
+	end
+snippet fork  fork .. join
+	fork
+	begin
+		${1}
+	end
+	${2}
+	join
+snippet fork  fork .. join_any
+	fork
+	begin
+		${1}
+	end
+	${2}
+	join_any
+snippet fork  fork .. join_none
+	fork
+	begin
+		${1}
+	end
+	${2}
+	join_none
+snippet function  function .. endfunction
+	function ${1:void} ${2:function_name} ($3);
+		${4}
+	endfunction: $2
+snippet covergroup  covergroup .. endgroup
+	covergroup ${1:cg_name}${2:(${3:cg_arg})} ${4:@(${5:cg_trigger})};
+		${6}
+	endgroup: $1
+snippet coverpoint  coverpoint .. { .. }
+	${1:cp_name} : coverpoint ${2:cp_signal} {
+		${3}
+	}
+snippet if  if() .. 
+	if(${1:condition})
+	begin
+		${2}
+	end
+snippet else  else .. 
+	else
+	begin
+		${1}
+	end
+snippet else  else if() .. 
+	else if(${1:condition})
+	begin
+		${2}
+	end
+snippet initial  initial ..
+	initial begin
+		${1}
+	end
+snippet interface  interface .. { .. }
+	// vmm rule 4-4 -- interfaces shall be packaged into the same files as the
+	// transactors that use them
+	interface ${1:name_if} (// input wire clk,
+					 // input wire reset
+					 );
+			timeunit 1ns;
+			timeprecision 100ps;
+	
+			${2}
+			// imports
+			// import pkg::*;
+	
+			parameter hold_time = 2;     // timeunit is 1ns
+			parameter setup_time = 2;    // change timing values as per requirement
+	
+			// Clocking Blocks
+			// just type clocking and tab to invoke snippet
+	
+			// Modports
+			// just type modport and tab to invoke snippet
+	
+	endinterface: $1
+snippet modport  modport .. { .. }
+	modport ${1:name_mp}
+			(${2}
+			 // clocking clocking_cb,
+			 // input input_name,
+			 // output output_port,
+			 // ....
+			 );
+snippet module  module .. endmodule
+	module ${1:module_name} (/*port details*/);
+			${2}
+	endmodule: $1
+snippet once  `ifndef XXX; `define XXX; `endif
+	\`ifndef ${1:`toupper('_'.substitute(expand('%:t'), '\.', '_', '').'_')`}
+	
+	\`define $1
+	
+	${2}
+	
+	\`endif // Guard
+snippet package  package .. endpackage
+	package ${1:package_name};
+			${2}
+	endpackage: $1
+snippet parameter  parameter .. 
+	parameter ${1:param_name} = ${2:param_value};
+	${3}
+snippet program  program .. { .. }
+	program automatic ${1:name};
+			// declarations
+			${2}
+	
+			initial begin
+	
+			end
+	endprogram: $1
+snippet randcase  randcase .. endcase
+	randcase;
+			${1:weight1}:
+					${3}
+			${2:weight2}:
+	endcase
+snippet repeat  repeat(N) ..
+	repeat(${1:N}) begin
+			${2}
+	end
+snippet struct  struct ... { ... }
+	typedef struct {
+		${2}
+	} ${1:name_s};
+snippet task  task .. endtask
+	task ${1:task_name} ($3);
+		${2}
+	endtask: $1
+snippet typedef  typedef ..
+	typedef ${1:type} ${2:type_name};
+	${3}
+snippet union  union ... { ... }
+	typedef union {
+		${2}
+	} ${1:name_u};
+snippet while  while() ..
+	while (${1:condition})
+	begin
+		${2}
+	end
+snippet ovm  OVM Agent
+	class ${1:ovc_name}_agent extends ovm_agent;
+		 ${3}
+		 ovm_active_passive_enum is_active;
+		 $1_sequencer sequencer;
+		 $1_driver driver;
+		 $1_monitor monitor;
+	
+		 \`ovm_component_utils_begin($1_agent)
+				\`ovm_field_enum(ovm_active_passive_enum, is_active, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				monitor=$1_monitor::type_id::create("monitor", this);
+				if (is_active == OVM_ACTIVE) begin
+		 driver=$1_driver::type_id::create("driver", this);
+		 sequencer=$1_sequencer::type_id::create("sequencer", this);
+				end
+		 endfunction: build
+	
+		 virtual function void connect();
+				if (is_active == OVM_ACTIVE) begin
+		 driver.seq_item_port.connect(sequencer.seq_item_export);
+				end
+		 endfunction: connect
+	
+		 virtual function void assign_vif(virtual interface ${2:ovc_if} vif);
+				monitor.vif = vif;
+				if (is_active == OVM_ACTIVE) begin
+		 driver.vif=vif;
+				end
+		 endfunction: assign_vif
+	
+	endclass: $1_agent
+snippet ovm_agent  OVM Agent
+	class ${1:ovc_name}_agent extends ovm_agent;
+		 ${3}
+		 ovm_active_passive_enum is_active;
+		 $1_sequencer sequencer;
+		 $1_driver driver;
+		 $1_monitor monitor;
+	
+		 \`ovm_component_utils_begin($1_agent)
+				\`ovm_field_enum(ovm_active_passive_enum, is_active, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				monitor=$1_monitor::type_id::create("monitor", this);
+				if (is_active == OVM_ACTIVE) begin
+		 driver=$1_driver::type_id::create("driver", this);
+		 sequencer=$1_sequencer::type_id::create("sequencer", this);
+				end
+		 endfunction: build
+	
+		 virtual function void connect();
+				if (is_active == OVM_ACTIVE) begin
+		 driver.seq_item_port.connect(sequencer.seq_item_export);
+				end
+		 endfunction: connect
+	
+		 virtual function void assign_vif(virtual interface ${2:ovc_if} vif);
+				monitor.vif = vif;
+				if (is_active == OVM_ACTIVE) begin
+		 driver.vif=vif;
+				end
+		 endfunction: assign_vif
+	
+	endclass: $1_agent
+snippet ovmagent  OVM Agent
+	class ${1:ovc_name}_agent extends ovm_agent;
+		 ${3}
+		 ovm_active_passive_enum is_active;
+		 $1_sequencer sequencer;
+		 $1_driver driver;
+		 $1_monitor monitor;
+	
+		 \`ovm_component_utils_begin($1_agent)
+				\`ovm_field_enum(ovm_active_passive_enum, is_active, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				monitor=$1_monitor::type_id::create("monitor", this);
+				if (is_active == OVM_ACTIVE) begin
+		 driver=$1_driver::type_id::create("driver", this);
+		 sequencer=$1_sequencer::type_id::create("sequencer", this);
+				end
+		 endfunction: build
+	
+		 virtual function void connect();
+				if (is_active == OVM_ACTIVE) begin
+		 driver.seq_item_port.connect(sequencer.seq_item_export);
+				end
+		 endfunction: connect
+	
+		 virtual function void assign_vif(virtual interface ${2:ovc_if} vif);
+				monitor.vif = vif;
+				if (is_active == OVM_ACTIVE) begin
+		 driver.vif=vif;
+				end
+		 endfunction: assign_vif
+	
+	endclass: $1_agent
+snippet ovm  OVM Data Item
+	class ${1:ovc_item} extends ovm_sequence_item;
+		 ${2}
+		 /* AUTO_OVM_VARS */
+		 rand bit [3:0] addr;
+		 rand bit [5:0] length;
+		 rand bit [7:0] payload [];
+		 
+		 \`ovm_object_utils_begin(yapp_pkt)
+				\`ovm_field_int(addr, OVM_ALL_ON)
+				\`ovm_field_int(length, OVM_ALL_ON)
+				\`ovm_field_array_int(payload, OVM_ALL_ON)
+		 \`ovm_object_utils_end
+	
+		 function new(string name="$1");
+				super.new(name);
+		 endfunction: new
+	
+	endclass: $1
+snippet ovm_sequence_item  OVM Data Item
+	class ${1:ovc_item} extends ovm_sequence_item;
+		 ${2}
+		 /* AUTO_OVM_VARS */
+		 rand bit [3:0] addr;
+		 rand bit [5:0] length;
+		 rand bit [7:0] payload [];
+		 
+		 \`ovm_object_utils_begin(yapp_pkt)
+				\`ovm_field_int(addr, OVM_ALL_ON)
+				\`ovm_field_int(length, OVM_ALL_ON)
+				\`ovm_field_array_int(payload, OVM_ALL_ON)
+		 \`ovm_object_utils_end
+	
+		 function new(string name="$1");
+				super.new(name);
+		 endfunction: new
+	
+	endclass: $1
+snippet ovm_data  OVM Data Item
+	class ${1:ovc_item} extends ovm_sequence_item;
+		 ${2}
+		 /* AUTO_OVM_VARS */
+		 rand bit [3:0] addr;
+		 rand bit [5:0] length;
+		 rand bit [7:0] payload [];
+		 
+		 \`ovm_object_utils_begin(yapp_pkt)
+				\`ovm_field_int(addr, OVM_ALL_ON)
+				\`ovm_field_int(length, OVM_ALL_ON)
+				\`ovm_field_array_int(payload, OVM_ALL_ON)
+		 \`ovm_object_utils_end
+	
+		 function new(string name="$1");
+				super.new(name);
+		 endfunction: new
+	
+	endclass: $1
+snippet ovm_data_item  OVM Data Item
+	class ${1:ovc_item} extends ovm_sequence_item;
+		 ${2}
+		 /* AUTO_OVM_VARS */
+		 rand bit [3:0] addr;
+		 rand bit [5:0] length;
+		 rand bit [7:0] payload [];
+		 
+		 \`ovm_object_utils_begin(yapp_pkt)
+				\`ovm_field_int(addr, OVM_ALL_ON)
+				\`ovm_field_int(length, OVM_ALL_ON)
+				\`ovm_field_array_int(payload, OVM_ALL_ON)
+		 \`ovm_object_utils_end
+	
+		 function new(string name="$1");
+				super.new(name);
+		 endfunction: new
+	
+	endclass: $1
+snippet ovm_item  OVM Data Item
+	class ${1:ovc_item} extends ovm_sequence_item;
+		 ${2}
+		 /* AUTO_OVM_VARS */
+		 rand bit [3:0] addr;
+		 rand bit [5:0] length;
+		 rand bit [7:0] payload [];
+		 
+		 \`ovm_object_utils_begin(yapp_pkt)
+				\`ovm_field_int(addr, OVM_ALL_ON)
+				\`ovm_field_int(length, OVM_ALL_ON)
+				\`ovm_field_array_int(payload, OVM_ALL_ON)
+		 \`ovm_object_utils_end
+	
+		 function new(string name="$1");
+				super.new(name);
+		 endfunction: new
+	
+	endclass: $1
+snippet ovm  OVM Driver
+	class ${1:ovc_name}_driver extends ovm_driver #(${2:ovc_item});
+		 ${4}
+		 string tID;
+		 virtual interface ${3:ovc_if} vif;
+		 $2 item;
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				tID = get_type_name();
+				tID = tID.toupper();
+		 endfunction: new
+	
+		 \`ovm_component_utils_begin($1_driver)
+				\`ovm_field_object(item, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 task get_and_drive();
+				forever
+		begin
+			 // wait(vif.reset==0);  // block until reset released
+			 seq_item_port.get_next_item(item);
+			 send_to_dut(item);
+			 seq_item_port.item_done();
+		end
+		 endtask: get_and_drive
+	
+		 task send_to_dut(input $2 item);
+				ovm_report_info(tID, $psprintf("%s : item sent is %0s",
+							 tID, item.sprint()), OVM_FULL);
+				// Send data to DUT (BFM - fill in your BFM code here)
+				#10 ;
+				#10 ;
+		 endtask: send_to_dut
+	
+		 task reset_dut();
+				// fill in any reset code here
+		 endtask: reset_dut
+	
+		 task run();
+				ovm_report_info(tID, $psprintf(" %s : running", tID), OVM_MEDIUM);
+				// reset_dut(); // fill in 'reset_dut()' if needed
+				get_and_drive();
+		 endtask: run
+	
+		 virtual function void report();
+				// fill in any reporting code if needed
+				logic dummy;
+		 endfunction: report
+	endclass: $1_driver
+snippet ovm_driver  OVM Driver
+	class ${1:ovc_name}_driver extends ovm_driver #(${2:ovc_item});
+		 ${4}
+		 string tID;
+		 virtual interface ${3:ovc_if} vif;
+		 $2 item;
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				tID = get_type_name();
+				tID = tID.toupper();
+		 endfunction: new
+	
+		 \`ovm_component_utils_begin($1_driver)
+				\`ovm_field_object(item, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 task get_and_drive();
+				forever
+		begin
+			 // wait(vif.reset==0);  // block until reset released
+			 seq_item_port.get_next_item(item);
+			 send_to_dut(item);
+			 seq_item_port.item_done();
+		end
+		 endtask: get_and_drive
+	
+		 task send_to_dut(input $2 item);
+				ovm_report_info(tID, $psprintf("%s : item sent is %0s",
+							 tID, item.sprint()), OVM_FULL);
+				// Send data to DUT (BFM - fill in your BFM code here)
+				#10 ;
+				#10 ;
+		 endtask: send_to_dut
+	
+		 task reset_dut();
+				// fill in any reset code here
+		 endtask: reset_dut
+	
+		 task run();
+				ovm_report_info(tID, $psprintf(" %s : running", tID), OVM_MEDIUM);
+				// reset_dut(); // fill in 'reset_dut()' if needed
+				get_and_drive();
+		 endtask: run
+	
+		 virtual function void report();
+				// fill in any reporting code if needed
+				logic dummy;
+		 endfunction: report
+	endclass: $1_driver
+snippet ovmdriver  OVM Driver
+	class ${1:ovc_name}_driver extends ovm_driver #(${2:ovc_item});
+		 ${4}
+		 string tID;
+		 virtual interface ${3:ovc_if} vif;
+		 $2 item;
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				tID = get_type_name();
+				tID = tID.toupper();
+		 endfunction: new
+	
+		 \`ovm_component_utils_begin($1_driver)
+				\`ovm_field_object(item, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 task get_and_drive();
+				forever
+		begin
+			 // wait(vif.reset==0);  // block until reset released
+			 seq_item_port.get_next_item(item);
+			 send_to_dut(item);
+			 seq_item_port.item_done();
+		end
+		 endtask: get_and_drive
+	
+		 task send_to_dut(input $2 item);
+				ovm_report_info(tID, $psprintf("%s : item sent is %0s",
+							 tID, item.sprint()), OVM_FULL);
+				// Send data to DUT (BFM - fill in your BFM code here)
+				#10 ;
+				#10 ;
+		 endtask: send_to_dut
+	
+		 task reset_dut();
+				// fill in any reset code here
+		 endtask: reset_dut
+	
+		 task run();
+				ovm_report_info(tID, $psprintf(" %s : running", tID), OVM_MEDIUM);
+				// reset_dut(); // fill in 'reset_dut()' if needed
+				get_and_drive();
+		 endtask: run
+	
+		 virtual function void report();
+				// fill in any reporting code if needed
+				logic dummy;
+		 endfunction: report
+	endclass: $1_driver
+snippet ovm  OVM Env
+	class ${1:ovc_name}_env extends ovm_env;
+		 ${2}
+		 $1_agent agent0;
+		 \`ovm_component_utils($1_env)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				agent0 = $1_agent::type_id::create("agent0", this);
+		 endfunction: build
+	
+	endclass: $1_env
+snippet ovm_env  OVM Env
+	class ${1:ovc_name}_env extends ovm_env;
+		 ${2}
+		 $1_agent agent0;
+		 \`ovm_component_utils($1_env)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				agent0 = $1_agent::type_id::create("agent0", this);
+		 endfunction: build
+	
+	endclass: $1_env
+snippet ovmenv  OVM Env
+	class ${1:ovc_name}_env extends ovm_env;
+		 ${2}
+		 $1_agent agent0;
+		 \`ovm_component_utils($1_env)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				agent0 = $1_agent::type_id::create("agent0", this);
+		 endfunction: build
+	
+	endclass: $1_env
+snippet ovm  OVM Interface
+	interface $1(input logic clock, input logic reset);
+	
+		 // ToDo: Declare the interface signals corresponding to the ports
+		 ${2}
+		 wire [7:0] sync_tx;
+		 wire [7:0] sync_rx;
+	
+		 logic async_sig;
+		 
+		 // ToDo: Define clocking blocks
+		 // -- use the 'clocking' snippet
+		 
+		 // ToDo: Define a modport for each interface perspective
+		 // -- use the 'modport' snippet
+	
+	endinterface: $1
+snippet interface  OVM Interface
+	interface $1(input logic clock, input logic reset);
+	
+		 // ToDo: Declare the interface signals corresponding to the ports
+		 ${2}
+		 wire [7:0] sync_tx;
+		 wire [7:0] sync_rx;
+	
+		 logic async_sig;
+		 
+		 // ToDo: Define clocking blocks
+		 // -- use the 'clocking' snippet
+		 
+		 // ToDo: Define a modport for each interface perspective
+		 // -- use the 'modport' snippet
+	
+	endinterface: $1
+snippet ovm  OVM Monitor
+	class ${1:ovc_name}_monitor extends ovm_monitor;
+		 ${4}
+		 string tID;
+		 virtual interface ${2:ovc_if} vif;
+		 ${3:ovc_item} trans;
+		 event e_trans_collected; // event to signal transaction collected
+		 // TLM port for scoreboard communication
+		 //  (implement scoreboard write method if needed)
+		 ovm_analysis_port #($3) sb_post;
+	
+		 \`ovm_component_utils_begin($1_monitor)
+				\`ovm_field_object(trans, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 task collect_data();
+				forever begin
+		 //put code to collect bus transactions here
+		 #10 ;
+	
+		 #10 ;
+	
+		 ->e_trans_collected; //signal transaction collection complete
+		 //post good transactions to scoreboard if enabled
+		 if (sb_post.size() > 0)
+			 sb_post.write(trans);
+				end;
+		 endtask: collect_data
+	
+		 // to FIX stuff for covergroup
+		 /*
+			//shell code for covergroup
+			covergroup cov_trans @ e_trans_collected;
+			cg1: coverpoint trans..$fields[2].
+			{ bins MIN[]     = {0};
+			bins MAX[]     = {63};
+			}
+	endgroup
+			*/
+	
+		 task run();
+				\`message(OVM_MEDIUM, ("$1_monitor: running"))
+				ovm_report_info(tID, $psprintf("%s: running", tID), OVM_MEDIUM);
+				collect_data();
+		 endtask: run
+	
+		 virtual function void report();
+				//fill in any reporting code if needed
+				logic dummy;
+		 endfunction: report
+	
+		 //new() function needs to be listed last so other items defined
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				tID = get_type_name();
+				tID = tID.toupper();
+				// to FIX stuff for covergroup
+				/*
+				 cov_trans = new();
+				 cov_trans.set_inst_name({get_full_name(), ".cov_trans"});
+				 */
+				trans = new();
+				sb_post = new("sb_post", this);
+		 endfunction: new
+	
+	endclass: $1_monitor
+snippet ovm_monitor  OVM Monitor
+	class ${1:ovc_name}_monitor extends ovm_monitor;
+		 ${4}
+		 string tID;
+		 virtual interface ${2:ovc_if} vif;
+		 ${3:ovc_item} trans;
+		 event e_trans_collected; // event to signal transaction collected
+		 // TLM port for scoreboard communication
+		 //  (implement scoreboard write method if needed)
+		 ovm_analysis_port #($3) sb_post;
+	
+		 \`ovm_component_utils_begin($1_monitor)
+				\`ovm_field_object(trans, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 task collect_data();
+				forever begin
+		 //put code to collect bus transactions here
+		 #10 ;
+	
+		 #10 ;
+	
+		 ->e_trans_collected; //signal transaction collection complete
+		 //post good transactions to scoreboard if enabled
+		 if (sb_post.size() > 0)
+			 sb_post.write(trans);
+				end;
+		 endtask: collect_data
+	
+		 // to FIX stuff for covergroup
+		 /*
+			//shell code for covergroup
+			covergroup cov_trans @ e_trans_collected;
+			cg1: coverpoint trans..$fields[2].
+			{ bins MIN[]     = {0};
+			bins MAX[]     = {63};
+			}
+	endgroup
+			*/
+	
+		 task run();
+				\`message(OVM_MEDIUM, ("$1_monitor: running"))
+				ovm_report_info(tID, $psprintf("%s: running", tID), OVM_MEDIUM);
+				collect_data();
+		 endtask: run
+	
+		 virtual function void report();
+				//fill in any reporting code if needed
+				logic dummy;
+		 endfunction: report
+	
+		 //new() function needs to be listed last so other items defined
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				tID = get_type_name();
+				tID = tID.toupper();
+				// to FIX stuff for covergroup
+				/*
+				 cov_trans = new();
+				 cov_trans.set_inst_name({get_full_name(), ".cov_trans"});
+				 */
+				trans = new();
+				sb_post = new("sb_post", this);
+		 endfunction: new
+	
+	endclass: $1_monitor
+snippet ovm_mon  OVM Monitor
+	class ${1:ovc_name}_monitor extends ovm_monitor;
+		 ${4}
+		 string tID;
+		 virtual interface ${2:ovc_if} vif;
+		 ${3:ovc_item} trans;
+		 event e_trans_collected; // event to signal transaction collected
+		 // TLM port for scoreboard communication
+		 //  (implement scoreboard write method if needed)
+		 ovm_analysis_port #($3) sb_post;
+	
+		 \`ovm_component_utils_begin($1_monitor)
+				\`ovm_field_object(trans, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 task collect_data();
+				forever begin
+		 //put code to collect bus transactions here
+		 #10 ;
+	
+		 #10 ;
+	
+		 ->e_trans_collected; //signal transaction collection complete
+		 //post good transactions to scoreboard if enabled
+		 if (sb_post.size() > 0)
+			 sb_post.write(trans);
+				end;
+		 endtask: collect_data
+	
+		 // to FIX stuff for covergroup
+		 /*
+			//shell code for covergroup
+			covergroup cov_trans @ e_trans_collected;
+			cg1: coverpoint trans..$fields[2].
+			{ bins MIN[]     = {0};
+			bins MAX[]     = {63};
+			}
+	endgroup
+			*/
+	
+		 task run();
+				\`message(OVM_MEDIUM, ("$1_monitor: running"))
+				ovm_report_info(tID, $psprintf("%s: running", tID), OVM_MEDIUM);
+				collect_data();
+		 endtask: run
+	
+		 virtual function void report();
+				//fill in any reporting code if needed
+				logic dummy;
+		 endfunction: report
+	
+		 //new() function needs to be listed last so other items defined
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				tID = get_type_name();
+				tID = tID.toupper();
+				// to FIX stuff for covergroup
+				/*
+				 cov_trans = new();
+				 cov_trans.set_inst_name({get_full_name(), ".cov_trans"});
+				 */
+				trans = new();
+				sb_post = new("sb_post", this);
+		 endfunction: new
+	
+	endclass: $1_monitor
+snippet ovmmon  OVM Monitor
+	class ${1:ovc_name}_monitor extends ovm_monitor;
+		 ${4}
+		 string tID;
+		 virtual interface ${2:ovc_if} vif;
+		 ${3:ovc_item} trans;
+		 event e_trans_collected; // event to signal transaction collected
+		 // TLM port for scoreboard communication
+		 //  (implement scoreboard write method if needed)
+		 ovm_analysis_port #($3) sb_post;
+	
+		 \`ovm_component_utils_begin($1_monitor)
+				\`ovm_field_object(trans, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 task collect_data();
+				forever begin
+		 //put code to collect bus transactions here
+		 #10 ;
+	
+		 #10 ;
+	
+		 ->e_trans_collected; //signal transaction collection complete
+		 //post good transactions to scoreboard if enabled
+		 if (sb_post.size() > 0)
+			 sb_post.write(trans);
+				end;
+		 endtask: collect_data
+	
+		 // to FIX stuff for covergroup
+		 /*
+			//shell code for covergroup
+			covergroup cov_trans @ e_trans_collected;
+			cg1: coverpoint trans..$fields[2].
+			{ bins MIN[]     = {0};
+			bins MAX[]     = {63};
+			}
+	endgroup
+			*/
+	
+		 task run();
+				\`message(OVM_MEDIUM, ("$1_monitor: running"))
+				ovm_report_info(tID, $psprintf("%s: running", tID), OVM_MEDIUM);
+				collect_data();
+		 endtask: run
+	
+		 virtual function void report();
+				//fill in any reporting code if needed
+				logic dummy;
+		 endfunction: report
+	
+		 //new() function needs to be listed last so other items defined
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				tID = get_type_name();
+				tID = tID.toupper();
+				// to FIX stuff for covergroup
+				/*
+				 cov_trans = new();
+				 cov_trans.set_inst_name({get_full_name(), ".cov_trans"});
+				 */
+				trans = new();
+				sb_post = new("sb_post", this);
+		 endfunction: new
+	
+	endclass: $1_monitor
+snippet ovmmonitor  OVM Monitor
+	class ${1:ovc_name}_monitor extends ovm_monitor;
+		 ${4}
+		 string tID;
+		 virtual interface ${2:ovc_if} vif;
+		 ${3:ovc_item} trans;
+		 event e_trans_collected; // event to signal transaction collected
+		 // TLM port for scoreboard communication
+		 //  (implement scoreboard write method if needed)
+		 ovm_analysis_port #($3) sb_post;
+	
+		 \`ovm_component_utils_begin($1_monitor)
+				\`ovm_field_object(trans, OVM_ALL_ON)
+		 \`ovm_component_utils_end
+	
+		 task collect_data();
+				forever begin
+		 //put code to collect bus transactions here
+		 #10 ;
+	
+		 #10 ;
+	
+		 ->e_trans_collected; //signal transaction collection complete
+		 //post good transactions to scoreboard if enabled
+		 if (sb_post.size() > 0)
+			 sb_post.write(trans);
+				end;
+		 endtask: collect_data
+	
+		 // to FIX stuff for covergroup
+		 /*
+			//shell code for covergroup
+			covergroup cov_trans @ e_trans_collected;
+			cg1: coverpoint trans..$fields[2].
+			{ bins MIN[]     = {0};
+			bins MAX[]     = {63};
+			}
+	endgroup
+			*/
+	
+		 task run();
+				\`message(OVM_MEDIUM, ("$1_monitor: running"))
+				ovm_report_info(tID, $psprintf("%s: running", tID), OVM_MEDIUM);
+				collect_data();
+		 endtask: run
+	
+		 virtual function void report();
+				//fill in any reporting code if needed
+				logic dummy;
+		 endfunction: report
+	
+		 //new() function needs to be listed last so other items defined
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				tID = get_type_name();
+				tID = tID.toupper();
+				// to FIX stuff for covergroup
+				/*
+				 cov_trans = new();
+				 cov_trans.set_inst_name({get_full_name(), ".cov_trans"});
+				 */
+				trans = new();
+				sb_post = new("sb_post", this);
+		 endfunction: new
+	
+	endclass: $1_monitor
+snippet ovm  OVM Seq Lib
+	class ${1:ovc_name}_seq1 extends ovm_sequence #(${2:ovc_item});
+		 ${3}
+		 string tID;
+		 \`ovm_sequence_utils($1_seq1, $1_sequencer)
+		 // $2 trans;
+		 // "req" built-in ovm_sequence class member for sequence_item
+		 rand int delay1;
+		 rand int delay2;
+		 constraint d1 {delay1 > 55; delay1 < 125;}
+		 constraint d2 {delay2 > 25; delay2 < 45;}
+	
+		 function new(string name = "$1_seq1");
+				super.new(name);
+				tID = get_type_name();
+				tID = tID.toupper();
+		 endfunction: new
+	
+		 task body();
+				\`message(OVM_LOW, ("RUNNING sequence: %s", get_name()))
+				ovm_report_info(tID, $psprintf("%s: sequence Running", tID), OVM_LOW);
+				// not the best way to print, just to confirm randomization
+				\`message(OVM_LOW, ("delay1=%0d, delay2=%0d", delay1, delay2))
+				ovm_report_info(tID, $psprintf("%s: delay1=%0d, delay2=%0d",
+							 tID, delay1, delay2), OVM_MEDIUM);
+				#delay1
+		// dummy delay to illustrate a sequence rand variable
+				\`ovm_do(req) // this line sends the transaction
+				#delay1
+		// get_response(rsp); // get response if implemented
+				\`ovm_do(req) // this line sends the transaction
+				#delay1
+		// get_response(rsp); // get response if implemented
+				\`ovm_do(req) // this line sends the transaction
+				#delay2
+		// get_response(rsp); // get response if implemented
+				\`message(OVM_LOW, ("sequence: %s complete", get_name()))
+				ovm_report_info(tID, $psprintf("sequence: %s complete", tID), OVM_LOW);
+		 endtask: body
+	
+	endclass: $1_seq1
+	
+	//additional sequences can be included in this file
+snippet ovm_seq_lib  OVM Seq Lib
+	class ${1:ovc_name}_seq1 extends ovm_sequence #(${2:ovc_item});
+		 ${3}
+		 string tID;
+		 \`ovm_sequence_utils($1_seq1, $1_sequencer)
+		 // $2 trans;
+		 // "req" built-in ovm_sequence class member for sequence_item
+		 rand int delay1;
+		 rand int delay2;
+		 constraint d1 {delay1 > 55; delay1 < 125;}
+		 constraint d2 {delay2 > 25; delay2 < 45;}
+	
+		 function new(string name = "$1_seq1");
+				super.new(name);
+				tID = get_type_name();
+				tID = tID.toupper();
+		 endfunction: new
+	
+		 task body();
+				\`message(OVM_LOW, ("RUNNING sequence: %s", get_name()))
+				ovm_report_info(tID, $psprintf("%s: sequence Running", tID), OVM_LOW);
+				// not the best way to print, just to confirm randomization
+				\`message(OVM_LOW, ("delay1=%0d, delay2=%0d", delay1, delay2))
+				ovm_report_info(tID, $psprintf("%s: delay1=%0d, delay2=%0d",
+							 tID, delay1, delay2), OVM_MEDIUM);
+				#delay1
+		// dummy delay to illustrate a sequence rand variable
+				\`ovm_do(req) // this line sends the transaction
+				#delay1
+		// get_response(rsp); // get response if implemented
+				\`ovm_do(req) // this line sends the transaction
+				#delay1
+		// get_response(rsp); // get response if implemented
+				\`ovm_do(req) // this line sends the transaction
+				#delay2
+		// get_response(rsp); // get response if implemented
+				\`message(OVM_LOW, ("sequence: %s complete", get_name()))
+				ovm_report_info(tID, $psprintf("sequence: %s complete", tID), OVM_LOW);
+		 endtask: body
+	
+	endclass: $1_seq1
+	
+	//additional sequences can be included in this file
+snippet ovm_seqlib  OVM Seq Lib
+	class ${1:ovc_name}_seq1 extends ovm_sequence #(${2:ovc_item});
+		 ${3}
+		 string tID;
+		 \`ovm_sequence_utils($1_seq1, $1_sequencer)
+		 // $2 trans;
+		 // "req" built-in ovm_sequence class member for sequence_item
+		 rand int delay1;
+		 rand int delay2;
+		 constraint d1 {delay1 > 55; delay1 < 125;}
+		 constraint d2 {delay2 > 25; delay2 < 45;}
+	
+		 function new(string name = "$1_seq1");
+				super.new(name);
+				tID = get_type_name();
+				tID = tID.toupper();
+		 endfunction: new
+	
+		 task body();
+				\`message(OVM_LOW, ("RUNNING sequence: %s", get_name()))
+				ovm_report_info(tID, $psprintf("%s: sequence Running", tID), OVM_LOW);
+				// not the best way to print, just to confirm randomization
+				\`message(OVM_LOW, ("delay1=%0d, delay2=%0d", delay1, delay2))
+				ovm_report_info(tID, $psprintf("%s: delay1=%0d, delay2=%0d",
+							 tID, delay1, delay2), OVM_MEDIUM);
+				#delay1
+		// dummy delay to illustrate a sequence rand variable
+				\`ovm_do(req) // this line sends the transaction
+				#delay1
+		// get_response(rsp); // get response if implemented
+				\`ovm_do(req) // this line sends the transaction
+				#delay1
+		// get_response(rsp); // get response if implemented
+				\`ovm_do(req) // this line sends the transaction
+				#delay2
+		// get_response(rsp); // get response if implemented
+				\`message(OVM_LOW, ("sequence: %s complete", get_name()))
+				ovm_report_info(tID, $psprintf("sequence: %s complete", tID), OVM_LOW);
+		 endtask: body
+	
+	endclass: $1_seq1
+	
+	//additional sequences can be included in this file
+snippet ovmseqlib  OVM Seq Lib
+	class ${1:ovc_name}_seq1 extends ovm_sequence #(${2:ovc_item});
+		 ${3}
+		 string tID;
+		 \`ovm_sequence_utils($1_seq1, $1_sequencer)
+		 // $2 trans;
+		 // "req" built-in ovm_sequence class member for sequence_item
+		 rand int delay1;
+		 rand int delay2;
+		 constraint d1 {delay1 > 55; delay1 < 125;}
+		 constraint d2 {delay2 > 25; delay2 < 45;}
+	
+		 function new(string name = "$1_seq1");
+				super.new(name);
+				tID = get_type_name();
+				tID = tID.toupper();
+		 endfunction: new
+	
+		 task body();
+				\`message(OVM_LOW, ("RUNNING sequence: %s", get_name()))
+				ovm_report_info(tID, $psprintf("%s: sequence Running", tID), OVM_LOW);
+				// not the best way to print, just to confirm randomization
+				\`message(OVM_LOW, ("delay1=%0d, delay2=%0d", delay1, delay2))
+				ovm_report_info(tID, $psprintf("%s: delay1=%0d, delay2=%0d",
+							 tID, delay1, delay2), OVM_MEDIUM);
+				#delay1
+		// dummy delay to illustrate a sequence rand variable
+				\`ovm_do(req) // this line sends the transaction
+				#delay1
+		// get_response(rsp); // get response if implemented
+				\`ovm_do(req) // this line sends the transaction
+				#delay1
+		// get_response(rsp); // get response if implemented
+				\`ovm_do(req) // this line sends the transaction
+				#delay2
+		// get_response(rsp); // get response if implemented
+				\`message(OVM_LOW, ("sequence: %s complete", get_name()))
+				ovm_report_info(tID, $psprintf("sequence: %s complete", tID), OVM_LOW);
+		 endtask: body
+	
+	endclass: $1_seq1
+	
+	//additional sequences can be included in this file
+snippet ovm  OVM Sequencer
+	class ${1:ovc_name}_sequencer extends ovm_sequencer #(${2:ovc_item});
+		 ${3}
+		 \`ovm_sequencer_utils($1_sequencer)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				\`ovm_update_sequence_lib_and_item($2)
+		 endfunction: new
+	
+	endclass: $1_sequencer
+snippet ovm_sequencer  OVM Sequencer
+	class ${1:ovc_name}_sequencer extends ovm_sequencer #(${2:ovc_item});
+		 ${3}
+		 \`ovm_sequencer_utils($1_sequencer)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				\`ovm_update_sequence_lib_and_item($2)
+		 endfunction: new
+	
+	endclass: $1_sequencer
+snippet ovmsequencer  OVM Sequencer
+	class ${1:ovc_name}_sequencer extends ovm_sequencer #(${2:ovc_item});
+		 ${3}
+		 \`ovm_sequencer_utils($1_sequencer)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+				\`ovm_update_sequence_lib_and_item($2)
+		 endfunction: new
+	
+	endclass: $1_sequencer
+snippet ovm  OVM Sve
+	class sve extends ovm_env;
+		 ${2}
+		 ${1:ovc_name}_env env0;
+		 \`ovm_component_utils(sve)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				env0 = $1_env::type_id::create("env0", this);
+		 endfunction: build
+	
+		 virtual function void connect();
+				env0.agent0.assign_vif(top.if0);
+		 endfunction: connect
+	endclass: sve
+snippet ovm_sve  OVM Sve
+	class sve extends ovm_env;
+		 ${2}
+		 ${1:ovc_name}_env env0;
+		 \`ovm_component_utils(sve)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				env0 = $1_env::type_id::create("env0", this);
+		 endfunction: build
+	
+		 virtual function void connect();
+				env0.agent0.assign_vif(top.if0);
+		 endfunction: connect
+	endclass: sve
+snippet ovmsve  OVM Sve
+	class sve extends ovm_env;
+		 ${2}
+		 ${1:ovc_name}_env env0;
+		 \`ovm_component_utils(sve)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				env0 = $1_env::type_id::create("env0", this);
+		 endfunction: build
+	
+		 virtual function void connect();
+				env0.agent0.assign_vif(top.if0);
+		 endfunction: connect
+	endclass: sve
+snippet ovm  OVM Test
+	class test1 extends ovm_test;
+		 ${2}
+		 sve sve0;
+		 \`ovm_component_utils(test1)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				set_config_int("sve0.env0.agent0.sequencer", "count", 2);
+				set_config_int("sve0.env0.agent0", "is_active", OVM_ACTIVE);
+				set_config_string("sve0.env0.agent0.sequencer",
+				"default_sequence", "${1:ovc_name}_seq1");
+				sve0 = sve::type_id::create("sve0", this);
+		 endfunction: build
+	
+		 task run();
+				\`message(OVM_LOW, ("test1 running..."))
+				ovm_top.print_topology();
+				#10000
+		//delay is simple "end of test" mechanism
+		//use objections in sequences for better "end of test" detection
+		\`message(OVM_LOW, ("User activated end of simulation"))
+				global_stop_request();
+		 endtask: run
+	
+	endclass: test1
+snippet ovm_test  OVM Test
+	class test1 extends ovm_test;
+		 ${2}
+		 sve sve0;
+		 \`ovm_component_utils(test1)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				set_config_int("sve0.env0.agent0.sequencer", "count", 2);
+				set_config_int("sve0.env0.agent0", "is_active", OVM_ACTIVE);
+				set_config_string("sve0.env0.agent0.sequencer",
+				"default_sequence", "${1:ovc_name}_seq1");
+				sve0 = sve::type_id::create("sve0", this);
+		 endfunction: build
+	
+		 task run();
+				\`message(OVM_LOW, ("test1 running..."))
+				ovm_top.print_topology();
+				#10000
+		//delay is simple "end of test" mechanism
+		//use objections in sequences for better "end of test" detection
+		\`message(OVM_LOW, ("User activated end of simulation"))
+				global_stop_request();
+		 endtask: run
+	
+	endclass: test1
+snippet ovmtest  OVM Test
+	class test1 extends ovm_test;
+		 ${2}
+		 sve sve0;
+		 \`ovm_component_utils(test1)
+	
+		 function new(string name, ovm_component parent);
+				super.new(name, parent);
+		 endfunction: new
+	
+		 virtual function void build();
+				super.build();
+				set_config_int("sve0.env0.agent0.sequencer", "count", 2);
+				set_config_int("sve0.env0.agent0", "is_active", OVM_ACTIVE);
+				set_config_string("sve0.env0.agent0.sequencer",
+				"default_sequence", "${1:ovc_name}_seq1");
+				sve0 = sve::type_id::create("sve0", this);
+		 endfunction: build
+	
+		 task run();
+				\`message(OVM_LOW, ("test1 running..."))
+				ovm_top.print_topology();
+				#10000
+		//delay is simple "end of test" mechanism
+		//use objections in sequences for better "end of test" detection
+		\`message(OVM_LOW, ("User activated end of simulation"))
+				global_stop_request();
+		 endtask: run
+	
+	endclass: test1
+snippet ovm  OVM Top
+	\`include "ovm.svh"
+	\`include "${1:ovc_name}_inc.svh"
+	\`include "sve.sv"
+	\`include "test1.sv"
+	module top();
+		 ${3}
+		 logic clock;
+		 logic reset;
+	
+		 ${2:ovc_if} if0(clock, reset); // instantiate ovc interface
+	
+		 initial
+			 begin
+		run_test();
+			 end
+	
+		 always #10 clock = ~clock;
+	
+		 initial
+			 begin
+		clock = 0;
+		reset = 1; // active high reset for this example
+		#75 reset = 0;
+			 end
+	
+		 // instantiate and connect dut to interface(s) here
+	
+	endmodule: top
+snippet ovm_top  OVM Top
+	\`include "ovm.svh"
+	\`include "${1:ovc_name}_inc.svh"
+	\`include "sve.sv"
+	\`include "test1.sv"
+	module top();
+		 ${3}
+		 logic clock;
+		 logic reset;
+	
+		 ${2:ovc_if} if0(clock, reset); // instantiate ovc interface
+	
+		 initial
+			 begin
+		run_test();
+			 end
+	
+		 always #10 clock = ~clock;
+	
+		 initial
+			 begin
+		clock = 0;
+		reset = 1; // active high reset for this example
+		#75 reset = 0;
+			 end
+	
+		 // instantiate and connect dut to interface(s) here
+	
+	endmodule: top
+snippet ovmtop  OVM Top
+	\`include "ovm.svh"
+	\`include "${1:ovc_name}_inc.svh"
+	\`include "sve.sv"
+	\`include "test1.sv"
+	module top();
+		 ${3}
+		 logic clock;
+		 logic reset;
+	
+		 ${2:ovc_if} if0(clock, reset); // instantiate ovc interface
+	
+		 initial
+			 begin
+		run_test();
+			 end
+	
+		 always #10 clock = ~clock;
+	
+		 initial
+			 begin
+		clock = 0;
+		reset = 1; // active high reset for this example
+		#75 reset = 0;
+			 end
+	
+		 // instantiate and connect dut to interface(s) here
+	
+	endmodule: top
